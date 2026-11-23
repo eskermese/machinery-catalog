@@ -1,0 +1,9 @@
+# Дамп — это данные, а не код: страницы и фотографии в репозиторий не кладём.
+# Скрипты сборки и это описание коммитятся, всё собранное — нет.
+pages/
+photos/
+products.json
+listings.json
+categories.json
+urls.txt
+missing-sections.txt

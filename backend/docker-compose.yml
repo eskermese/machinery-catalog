@@ -1,0 +1,138 @@
+services:
+  postgres:
+    container_name: techline-postgres
+    image: postgres:17-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: techline
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d techline" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - techline-pgdata:/var/lib/postgresql/data
+    networks:
+      - techline-network
+
+  prometheus:
+    container_name: techline-prometheus
+    image: prom/prometheus:v2.45.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - techline-network
+
+  dragonfly:
+    container_name: techline-dragonfly
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:v1.33.0
+    ulimits:
+      memlock: -1
+    environment:
+      - DFLY_proactor_threads=4
+    ports:
+      - "6379:6379"
+    volumes:
+      - techline-cache:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - techline-network
+
+  pyroscope:
+    container_name: techline-pyroscope
+    image: grafana/pyroscope:latest
+    ports:
+      - "4040:4040"
+    volumes:
+      - techline-pyroscope:/var/lib/pyroscope
+    networks:
+      - techline-network
+
+  service:
+    container_name: techline-service
+    image: techline:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+      pyroscope:
+        condition: service_started
+    environment:
+      PYROSCOPE_SERVER_ADDRESS: http://pyroscope:4040
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/techline?sslmode=disable
+      CACHE_ADDR: dragonfly:6379
+      LOG_LEVEL: ${LOG_LEVEL:-debug}
+      # Секрет подписи токенов доступа.
+      JWT_SECRET: ${JWT_SECRET:-local-jwt-secret}
+      # Администраторы заводятся при старте: сами зарегистрироваться они не могут.
+      ADMIN_PHONES: ${ADMIN_PHONES:-+77000000001}
+      # Менеджер заводит учётную запись первым входом: ручки «создать сотрудника»
+      # в API нет. Обратная сторона — пускает ЛЮБОЙ номер, а менеджер видит
+      # заявки с именами и телефонами клиентов. Пока сервис доступен только
+      # изнутри, это допустимо; выставляя его наружу (туннель, стенд с белым IP),
+      # ставьте AUTH_SELF_REGISTRATION=false — тогда войдут лишь заведённые.
+      AUTH_SELF_REGISTRATION: ${AUTH_SELF_REGISTRATION:-true}
+      FX_SYNC_ENABLED: ${FX_SYNC_ENABLED:-true}
+      # Отладочный вход по заголовкам выключен: локально работает та же схема, что в проде.
+      DEBUG_HEADER_AUTH: ${DEBUG_HEADER_AUTH:-false}
+      GATEWAY_TOKEN: ${GATEWAY_TOKEN:-local-gateway-token}
+      # Абсолютный путь, а не «./media»: относительный зависит от рабочего
+      # каталога процесса, и при его смене файлы уехали бы в другое место,
+      # мимо тома, — то есть снова терялись бы при пересоздании контейнера.
+      MEDIA_DIR: /app/media
+    volumes:
+      # Именованный том обязателен: изображения — состояние, как и база.
+      # Без него они лежат в записываемом слое контейнера и исчезают при любом
+      # пересоздании (docker compose up после сборки), тогда как строки
+      # в базе переживают его на своём томе и продолжают ссылаться на файлы,
+      # которых уже нет.
+      - techline-media:/app/media
+    networks:
+      - techline-network
+
+  integration:
+    container_name: techline-integration
+    # Профиль, чтобы `docker compose up` не поднимал интеграционные тесты
+    # вместе со стендом. Сервис с профилем стартует только по явной просьбе:
+    # `docker compose run integration` (как в `make integration`) или
+    # `--profile integration`. Без него тесты запускались заодно со стендом
+    # и оставляли в его базе свои фикстуры.
+    profiles:
+      - integration
+    build:
+      context: .
+      dockerfile: integration-test/Dockerfile
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - "WORKING_DIRECTORY=$PWD"
+      - "BRANCH_NAME=$BRANCH_NAME"
+    networks:
+      - techline-network
+
+volumes:
+  techline-media:
+  techline-cache:
+  techline-pgdata:
+  techline-pyroscope:
+networks:
+  techline-network:
+    name: techline-network
+    external: false

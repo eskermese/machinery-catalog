@@ -1,0 +1,12 @@
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+
+# env — коммитится только пример
+.env
+.env.*
+!.env.example
+
+# agent work logs
+tasks_results/

@@ -1,0 +1,29 @@
+service_name: "techline.integration-test"
+network_name: "techline-network"
+branch_name: "main"
+version: "v1.0.0-test"
+
+hostnames:
+  database_hostname: "postgres"
+  cache_hostname: "redis"
+  server_hostname: "service"
+
+logger:
+  level: "debug"
+
+cache:
+  addr: "redis:6379"
+
+database:
+  url: "postgres://postgres:postgres@postgres:5432/techline?sslmode=disable"
+  max_conns: 10
+  min_conns: 0
+  connect_timeout: 5s
+
+postgres:
+  user: "postgres"
+  password: "postgres"
+  db: "techline"
+
+server:
+  http_listen_addr: 8000

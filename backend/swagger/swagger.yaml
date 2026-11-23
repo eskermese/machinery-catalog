@@ -1,0 +1,4565 @@
+basePath: /api
+definitions:
+  form.AttributeFilter:
+    properties:
+      attributeID:
+        description: AttributeID характеристика, к которой применяется условие.
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      codes:
+        description: Codes допустимые коды варианта; несколько означают «любой из».
+        example:
+        - crawler
+        items:
+          type: string
+        type: array
+      flag:
+        description: Flag требуемое значение флаговой характеристики.
+        example: true
+        type: boolean
+      numberMax:
+        description: NumberMax верхняя граница числовой характеристики включительно.
+        example: "250.5"
+        type: string
+      numberMin:
+        description: NumberMin нижняя граница числовой характеристики включительно.
+        example: "150"
+        type: string
+    required:
+    - attributeID
+    type: object
+  form.AttributeOptionSave:
+    properties:
+      code:
+        description: Code код варианта.
+        example: crawler
+        type: string
+      nameEN:
+        description: NameEN название на английском.
+        example: Crawler
+        type: string
+      nameKK:
+        description: NameKK название на казахском.
+        example: Шынжыр табанды
+        type: string
+      nameRU:
+        description: NameRU название на русском.
+        example: Гусеничный
+        type: string
+      position:
+        description: Position порядок вывода.
+        example: 1
+        minimum: 0
+        type: integer
+    required:
+    - code
+    - nameRU
+    type: object
+  form.AttributeSave:
+    properties:
+      categoryID:
+        description: CategoryID категория, которой принадлежит характеристика.
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      code:
+        description: Code машинный ключ характеристики.
+        example: engine_power
+        type: string
+      dataType:
+        description: 'DataType тип значения: number, string, bool или enum.'
+        enum:
+        - number
+        - string
+        - bool
+        - enum
+        example: number
+        type: string
+      isFilterable:
+        description: IsFilterable выносить ли характеристику в панель фильтров.
+        example: true
+        type: boolean
+      nameEN:
+        description: NameEN название на английском.
+        example: Engine power
+        type: string
+      nameKK:
+        description: NameKK название на казахском.
+        example: Қуаты
+        type: string
+      nameRU:
+        description: NameRU название на русском.
+        example: Мощность
+        type: string
+      options:
+        description: Options варианты для типа enum.
+        items:
+          $ref: '#/definitions/form.AttributeOptionSave'
+        type: array
+      position:
+        description: Position порядок вывода.
+        example: 1
+        minimum: 0
+        type: integer
+      unit:
+        description: Unit единица измерения; допустима только у числовой характеристики.
+        example: кВт
+        type: string
+    required:
+    - categoryID
+    - code
+    - dataType
+    - nameRU
+    type: object
+  form.AuthTokenIssue:
+    properties:
+      phone:
+        description: Номер телефона
+        example: "+77001234567"
+        type: string
+    required:
+    - phone
+    type: object
+  form.AuthUserRename:
+    properties:
+      name:
+        description: Name имя для показа; пустая строка очищает имя.
+        example: Иван Петров
+        type: string
+    type: object
+  form.CategorySave:
+    properties:
+      imagePath:
+        description: |-
+          ImagePath обложка раздела: путь в хранилище из ответа
+          POST /v1/admin/media/categories. Пусто — обложку подставит сервис
+          по первой опубликованной машине поддерева.
+        example: categories/7c9e6679.jpg
+        type: string
+      isActive:
+        description: IsActive видимость ветки на сайте.
+        example: true
+        type: boolean
+      nameEN:
+        example: Excavators
+        type: string
+      nameKK:
+        description: |-
+          NameKK и NameEN названия на казахском и английском.
+
+          НЕОБЯЗАТЕЛЬНЫ, в отличие от русского. Русский — источник правды:
+          витрина показывает его, пока перевода нет. Требовать перевод здесь
+          значило бы запретить заводить раздел до того, как его перевели,
+          а заглушка вместо перевода хуже пустоты — витрина не отличит её
+          от настоящего названия.
+        example: Экскаваторлар
+        type: string
+      nameRU:
+        description: NameRU название на русском.
+        example: Экскаваторы
+        type: string
+      parentID:
+        description: ParentID родительская категория; пусто — корень.
+        example: ""
+        type: string
+      position:
+        description: Position порядок вывода.
+        example: 1
+        minimum: 0
+        type: integer
+      slug:
+        description: Slug идентификатор в URL.
+        example: excavators
+        type: string
+    required:
+    - nameRU
+    - slug
+    type: object
+  form.FXMarkupSave:
+    properties:
+      baseCurrency:
+        description: BaseCurrency валюта, из которой считаем.
+        example: CNY
+        type: string
+      effectiveFrom:
+        description: EffectiveFrom момент вступления в силу; пусто — сейчас.
+        type: string
+      markupBps:
+        description: |-
+          MarkupBps наценка в базисных пунктах: 200 это 2 %.
+
+          Базисные пункты, а не проценты дробью: целые участвуют в арифметике
+          без ошибки округления, и наценка оказывается в той же единице,
+          что ставка лизинга.
+        example: 200
+        minimum: 0
+        type: integer
+      quoteCurrency:
+        description: QuoteCurrency валюта, в которую считаем.
+        example: KZT
+        type: string
+    required:
+    - baseCurrency
+    - quoteCurrency
+    type: object
+  form.FXRateSave:
+    properties:
+      baseCurrency:
+        description: BaseCurrency валюта, из которой считаем.
+        example: CNY
+        type: string
+      quoteCurrency:
+        description: QuoteCurrency валюта, в которую считаем.
+        example: KZT
+        type: string
+      rate:
+        description: |-
+          Rate курс строкой: сколько единиц котируемой валюты за одну базовую.
+
+          Строкой, а не числом: JSON-число прошло бы через двоичную плавающую
+          точку и вернулось бы с хвостом в младшем разряде — а из этого курса
+          считается цена всего каталога.
+        example: "72.55"
+        type: string
+      rateDate:
+        description: |-
+          RateDate дата, на которую действует курс, в формате ГГГГ-ММ-ДД.
+          Пусто — сегодня.
+        example: "2026-09-01"
+        type: string
+    required:
+    - baseCurrency
+    - quoteCurrency
+    - rate
+    type: object
+  form.LeadAssign:
+    properties:
+      managerID:
+        description: ManagerID ответственный менеджер.
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+    required:
+    - managerID
+    type: object
+  form.LeadComment:
+    properties:
+      comment:
+        description: Comment заметка менеджера по заявке.
+        example: Перезвонить после обеда
+        maxLength: 2000
+        type: string
+    type: object
+  form.LeadCreate:
+    properties:
+      city:
+        description: City город.
+        example: Алматы
+        type: string
+      machineID:
+        description: MachineID машина, из карточки которой пришла заявка.
+        example: ""
+        type: string
+      message:
+        description: |-
+          Message что написал клиент: какая деталь нужна, к какой технике,
+          что случилось. Необязательное.
+
+          Отдельно от комментария менеджера: то поле принадлежит ему, и одно
+          на двоих означало бы, что его правка затирает запрос клиента.
+        example: Нужен масляный фильтр на XE215C
+        maxLength: 2000
+        type: string
+      name:
+        description: Name имя клиента.
+        example: Иван
+        type: string
+      phone:
+        description: 'Phone номер телефона в любом написании: нормализуется сервисом.'
+        example: +7 (700) 111-22-33
+        type: string
+      quoteID:
+        description: QuoteID коммерческое предложение, по которому обратились.
+        example: ""
+        type: string
+      source:
+        description: 'Source откуда пришла заявка: страница, форма или рекламная метка.'
+        example: machine_card
+        type: string
+    required:
+    - name
+    - phone
+    - source
+    type: object
+  form.LeadStatusChange:
+    properties:
+      status:
+        description: Status целевой статус.
+        enum:
+        - new
+        - in_progress
+        - won
+        - lost
+        example: in_progress
+        type: string
+    required:
+    - status
+    type: object
+  form.LeasingCalculate:
+    properties:
+      commissionKztCents:
+        description: CommissionKztCents разовая комиссия в тиынах.
+        example: 0
+        minimum: 0
+        type: integer
+      downPaymentBps:
+        description: 'DownPaymentBps первоначальный взнос в базисных пунктах: 20.00%
+          это 2000.'
+        example: 2000
+        maximum: 10000
+        minimum: 0
+        type: integer
+      leasingProgramID:
+        description: LeasingProgramID выбранная программа; пусто — расчёт по переданным
+          параметрам.
+        example: ""
+        type: string
+      machineSlug:
+        description: MachineSlug карточка, по цене которой считается платёж.
+        example: xcmg-xe215c
+        type: string
+      rateBps:
+        description: 'RateBps годовая ставка в базисных пунктах: 18% это 1800.'
+        example: 1800
+        maximum: 10000
+        minimum: 0
+        type: integer
+      residualValueKztCents:
+        description: ResidualValueKztCents выкупная стоимость в тиынах.
+        example: 0
+        minimum: 0
+        type: integer
+      scheduleType:
+        description: 'ScheduleType тип графика: annuity или differentiated.'
+        enum:
+        - annuity
+        - differentiated
+        example: annuity
+        type: string
+      termMonths:
+        description: TermMonths срок в месяцах.
+        example: 36
+        maximum: 360
+        type: integer
+    required:
+    - machineSlug
+    - scheduleType
+    - termMonths
+    type: object
+  form.LeasingProgramSave:
+    properties:
+      id:
+        description: ID программы; пусто — создание новой.
+        example: ""
+        type: string
+      isActive:
+        description: IsActive действует ли программа.
+        example: true
+        type: boolean
+      logoPath:
+        description: LogoPath путь к логотипу партнёра внутри хранилища.
+        example: ""
+        type: string
+      maxAmountCnyCents:
+        description: MaxAmountCnyCents потолок суммы сделки в фынях (1/100 юаня);
+          пусто — без потолка.
+        example: 50000000
+        type: integer
+      minDownPaymentBps:
+        description: MinDownPaymentBps минимальный первоначальный взнос в базисных
+          пунктах.
+        example: 1500
+        maximum: 10000
+        minimum: 0
+        type: integer
+      nameEN:
+        description: NameEN название на английском.
+        example: Halyk Leasing
+        type: string
+      nameKK:
+        description: NameKK название на казахском.
+        example: Halyk Leasing
+        type: string
+      nameRU:
+        description: NameRU название на русском.
+        example: Halyk Leasing
+        type: string
+      position:
+        description: Position порядок вывода.
+        example: 1
+        minimum: 0
+        type: integer
+      rateMaxBps:
+        description: RateMaxBps верхняя граница ставки в базисных пунктах.
+        example: 2400
+        minimum: 0
+        type: integer
+      rateMinBps:
+        description: RateMinBps нижняя граница ставки в базисных пунктах.
+        example: 1800
+        minimum: 0
+        type: integer
+      termMonthsMax:
+        description: TermMonthsMax верхняя граница срока в месяцах.
+        example: 60
+        type: integer
+      termMonthsMin:
+        description: TermMonthsMin нижняя граница срока в месяцах.
+        example: 12
+        type: integer
+    required:
+    - nameEN
+    - nameKK
+    - nameRU
+    - termMonthsMax
+    - termMonthsMin
+    type: object
+  form.MachineAttributeValueSave:
+    properties:
+      attributeID:
+        description: AttributeID характеристика.
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      code:
+        description: Code код варианта для характеристики типа enum.
+        example: crawler
+        type: string
+      flag:
+        description: Flag значение флаговой характеристики.
+        example: true
+        type: boolean
+      number:
+        description: Number числовое значение строкой, чтобы не терять разряды на
+          float64.
+        example: "155"
+        type: string
+      text:
+        description: Text строковое значение.
+        example: ""
+        type: string
+    required:
+    - attributeID
+    type: object
+  form.MachineImageSave:
+    properties:
+      altEN:
+        description: AltEN подпись на английском.
+        example: ""
+        type: string
+      altKK:
+        description: AltKK подпись на казахском.
+        example: ""
+        type: string
+      altRU:
+        description: AltRU подпись на русском.
+        example: ""
+        type: string
+      isPrimary:
+        description: IsPrimary главное фото; допустимо не более одного на карточку.
+        example: true
+        type: boolean
+      path:
+        description: Path путь в файловом хранилище.
+        example: machines/xcmg-xe215c-1.jpg
+        type: string
+      position:
+        description: Position порядок показа.
+        example: 0
+        minimum: 0
+        type: integer
+    required:
+    - path
+    type: object
+  form.MachineImagesReplace:
+    properties:
+      images:
+        description: Images новый набор фотографий; пустой набор очищает галерею.
+        items:
+          $ref: '#/definitions/form.MachineImageSave'
+        type: array
+    type: object
+  form.MachineSave:
+    properties:
+      attributeValues:
+        description: AttributeValues значения характеристик.
+        items:
+          $ref: '#/definitions/form.MachineAttributeValueSave'
+        type: array
+      availability:
+        description: 'Availability наличие: in_stock или on_order.'
+        enum:
+        - in_stock
+        - on_order
+        example: in_stock
+        type: string
+      brand:
+        description: Brand бренд.
+        example: XCMG
+        type: string
+      categoryID:
+        description: CategoryID категория карточки.
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      condition:
+        description: 'Condition состояние: new или used.'
+        enum:
+        - new
+        - used
+        example: new
+        type: string
+      deliveryWeeks:
+        description: DeliveryWeeks срок поставки в неделях.
+        example: 8
+        type: integer
+      descriptionEN:
+        description: DescriptionEN описание на английском.
+        example: ""
+        type: string
+      descriptionKK:
+        description: DescriptionKK описание на казахском.
+        example: ""
+        type: string
+      descriptionRU:
+        description: DescriptionRU описание на русском.
+        example: ""
+        type: string
+      fuelConsumptionLph:
+        description: |-
+          FuelConsumptionLph расход топлива в литрах на моточас.
+
+          Строкой, а не числом: расход паспортный и дробный («12.7»), и float64
+          на границе контракта — лишний повод для расхождения в младшем разряде.
+          Пусто — не заведён, и расчёт стоимости владения так и скажет.
+        example: "12.7"
+        type: string
+      images:
+        description: Images фотографии карточки.
+        items:
+          $ref: '#/definitions/form.MachineImageSave'
+        type: array
+      isPricePublic:
+        description: IsPricePublic показывать ли цену на витрине.
+        example: true
+        type: boolean
+      model:
+        description: Model модель.
+        example: XE215C
+        type: string
+      nameEN:
+        description: NameEN название на английском.
+        example: XCMG XE215C excavator
+        type: string
+      nameKK:
+        description: NameKK название на казахском.
+        example: XCMG XE215C экскаваторы
+        type: string
+      nameRU:
+        description: NameRU название на русском.
+        example: Экскаватор XCMG XE215C
+        type: string
+      priceCnyCents:
+        description: |-
+          PriceCNYCents цена в фынях (1/100 юаня).
+
+          Целое в центах, а не доллары строкой или числом: на границе не должно
+          быть места для потери точности, а «89500.00» пришлось бы разбирать
+          и округлять — то есть заводить ровно тот шаг, где точность и теряется.
+        example: 8950000
+        minimum: 0
+        type: integer
+      productionYear:
+        description: ProductionYear год выпуска.
+        example: 2024
+        maximum: 2100
+        minimum: 1950
+        type: integer
+      serviceCostCnyCents:
+        description: |-
+          ServiceCostCnyCents стоимость одного планового ТО в фынях (1/100 юаня);
+          пусто — не заведена.
+        example: 120000
+        minimum: 0
+        type: integer
+      serviceIntervalHours:
+        description: ServiceIntervalHours моточасов между плановыми ТО; пусто — не
+          заведён.
+        example: 500
+        type: integer
+      slug:
+        description: Slug идентификатор в URL.
+        example: xcmg-xe215c
+        type: string
+    required:
+    - availability
+    - brand
+    - categoryID
+    - condition
+    - model
+    - nameRU
+    - slug
+    type: object
+  form.MachineSearch:
+    properties:
+      attributes:
+        description: Attributes условия по характеристикам, произвольный набор.
+        items:
+          $ref: '#/definitions/form.AttributeFilter'
+        type: array
+      availability:
+        description: 'Availability наличие: in_stock или on_order.'
+        enum:
+        - in_stock
+        - on_order
+        example: in_stock
+        type: string
+      categoryID:
+        description: CategoryID ограничивает выдачу категорией.
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      condition:
+        description: 'Condition состояние: new или used.'
+        enum:
+        - new
+        - used
+        example: new
+        type: string
+      cursor:
+        description: Cursor курсор следующей страницы, полученный в предыдущем ответе.
+        example: ""
+        type: string
+      includeSubcategories:
+        description: IncludeSubcategories расширяет отбор на всё поддерево категории.
+        example: true
+        type: boolean
+      isActive:
+        description: |-
+          IsActive отбирает опубликованные (true) или черновики (false).
+
+          На публичной витрине игнорируется: там признак уже зафиксирован,
+          и переопределить его параметром запроса нельзя.
+        example: false
+        type: boolean
+      limit:
+        description: Limit размер страницы. Значение сверх допустимого урезается до
+          максимума.
+        example: 20
+        minimum: 0
+        type: integer
+      priceMaxCents:
+        description: PriceMaxCents верхняя граница цены в фынях (1/100 юаня) включительно.
+        example: 15000000
+        minimum: 0
+        type: integer
+      priceMinCents:
+        description: PriceMinCents нижняя граница цены в фынях (1/100 юаня) включительно.
+        example: 5000000
+        minimum: 0
+        type: integer
+      productionYearMax:
+        description: ProductionYearMax верхняя граница года выпуска включительно.
+        example: 2026
+        maximum: 2100
+        minimum: 1950
+        type: integer
+      productionYearMin:
+        description: ProductionYearMin нижняя граница года выпуска включительно.
+        example: 2018
+        maximum: 2100
+        minimum: 1950
+        type: integer
+      query:
+        description: |-
+          Query подстрока для поиска по названию, бренду и модели.
+
+          Одно поле и для витрины, и для админки: ищутся одни и те же колонки,
+          а видимость черновиков решает не оно.
+        example: экскаватор
+        maxLength: 200
+        type: string
+      sort:
+        description: 'Sort порядок сортировки: price_asc, price_desc или published_desc.'
+        enum:
+        - price_asc
+        - price_desc
+        - published_desc
+        example: price_asc
+        type: string
+      withTotal:
+        description: |-
+          WithTotal просить ли общее число найденных карточек.
+
+          Стоит второго запроса по тому же предикату, поэтому по умолчанию
+          выключено: бесконечной прокрутке итог не нужен.
+        example: false
+        type: boolean
+    type: object
+  form.PriceSettingsSave:
+    properties:
+      showUsdPrice:
+        description: ShowUSDPrice показывать ли цену в долларах на витрине.
+        example: true
+        type: boolean
+    type: object
+  form.QuoteIssue:
+    properties:
+      commissionKztCents:
+        description: CommissionKztCents разовая комиссия в тиынах.
+        example: 0
+        minimum: 0
+        type: integer
+      configuration:
+        additionalProperties: {}
+        description: Configuration выбранная комплектация и опции.
+        type: object
+      downPaymentBps:
+        description: 'DownPaymentBps первоначальный взнос в базисных пунктах: 20.00%
+          это 2000.'
+        example: 2000
+        maximum: 10000
+        minimum: 0
+        type: integer
+      leasingProgramID:
+        description: LeasingProgramID выбранная программа; пусто — расчёт по переданным
+          параметрам.
+        example: ""
+        type: string
+      machineSlug:
+        description: MachineSlug карточка, по которой выпускается предложение.
+        example: xcmg-xe215c
+        type: string
+      rateBps:
+        description: 'RateBps годовая ставка в базисных пунктах: 18% это 1800.'
+        example: 1800
+        minimum: 0
+        type: integer
+      residualValueKztCents:
+        description: ResidualValueKztCents выкупная стоимость в тиынах.
+        example: 0
+        minimum: 0
+        type: integer
+      scheduleType:
+        description: 'ScheduleType тип графика: annuity или differentiated.'
+        enum:
+        - annuity
+        - differentiated
+        example: annuity
+        type: string
+      termMonths:
+        description: TermMonths срок в месяцах.
+        example: 36
+        type: integer
+      validForDays:
+        description: ValidForDays срок годности предложения в днях; 0 — значение по
+          умолчанию.
+        example: 14
+        maximum: 365
+        minimum: 0
+        type: integer
+    required:
+    - machineSlug
+    - scheduleType
+    - termMonths
+    type: object
+  form.QuoteRecalculate:
+    properties:
+      downPaymentBps:
+        description: DownPaymentBps первоначальный взнос в базисных пунктах.
+        example: 2000
+        maximum: 10000
+        minimum: 0
+        type: integer
+      rateBps:
+        description: RateBps годовая ставка в базисных пунктах.
+        example: 1800
+        maximum: 10000
+        minimum: 0
+        type: integer
+      scheduleType:
+        description: 'ScheduleType тип графика: annuity или differentiated.'
+        enum:
+        - annuity
+        - differentiated
+        example: annuity
+        type: string
+      termMonths:
+        description: TermMonths срок в месяцах.
+        example: 48
+        maximum: 360
+        type: integer
+    required:
+    - scheduleType
+    - termMonths
+    type: object
+  form.ResidualValueCurveSave:
+    properties:
+      annualDropBps:
+        description: AnnualDropBps сколько теряется за каждый следующий год ОТ ОСТАТКА.
+        example: 1200
+        maximum: 10000
+        minimum: 0
+        type: integer
+      firstYearDropBps:
+        description: |-
+          FirstYearDropBps сколько техника теряет за первый год, в базисных пунктах.
+
+          Отдельно от остальных лет: за первый год техника теряет заметно больше,
+          и одна ставка на все годы либо завысила бы остаток свежей машины,
+          либо занизила бы старой.
+        example: 2000
+        maximum: 10000
+        minimum: 0
+        type: integer
+      floorBps:
+        description: |-
+          FloorBps доля, ниже которой стоимость не опускается.
+
+          Чистая геометрия на длинном горизонте уводит цену почти в ноль, чего
+          с техникой не происходит: у неё есть цена узлов и металла.
+        example: 2000
+        maximum: 10000
+        minimum: 0
+        type: integer
+    type: object
+  form.TCOCalculate:
+    properties:
+      fuelPriceKztCents:
+        description: FuelPriceKztCents цена литра топлива в тиынах.
+        example: 29000
+        minimum: 0
+        type: integer
+      hoursPerYear:
+        description: HoursPerYear наработка в моточасах за год.
+        example: 1500
+        maximum: 8760
+        type: integer
+      operatorHourlyKztCents:
+        description: OperatorHourlyKztCents оплата оператора за моточас в тиынах.
+        example: 250000
+        minimum: 0
+        type: integer
+      years:
+        description: Years срок владения в годах.
+        example: 5
+        maximum: 30
+        type: integer
+    required:
+    - hoursPerYear
+    - years
+    type: object
+  presenter.Attribute:
+    properties:
+      categoryID:
+        description: Категория
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      code:
+        description: Машинный ключ
+        example: engine_power
+        type: string
+      dataType:
+        description: Тип значения
+        example: number
+        type: string
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      isFilterable:
+        description: Показывать в фильтрах
+        example: true
+        type: boolean
+      nameEN:
+        description: Название на английском; пусто, пока нет перевода
+        example: Engine power
+        type: string
+      nameKK:
+        description: Название на казахском; пусто, пока нет перевода
+        example: Қуаты
+        type: string
+      nameRU:
+        description: Название на русском
+        example: Мощность
+        type: string
+      numberMax:
+        example: "420"
+        type: string
+      numberMin:
+        description: |-
+          NumberMin и NumberMax границы значений в разделе; пусто — значений нет
+          или характеристика не числовая. Заполняются только публичной ручкой:
+          из них витрина строит подсказку под полем фильтра.
+        example: "55"
+        type: string
+      options:
+        description: Варианты для типа enum
+        items:
+          $ref: '#/definitions/presenter.AttributeOption'
+        type: array
+      position:
+        description: Порядок вывода
+        example: 1
+        type: integer
+      unit:
+        description: Единица измерения
+        example: кВт
+        type: string
+    required:
+    - categoryID
+    - code
+    - dataType
+    - id
+    - isFilterable
+    - nameEN
+    - nameKK
+    - nameRU
+    - options
+    - position
+    type: object
+  presenter.AttributeList:
+    properties:
+      items:
+        description: Характеристики в порядке вывода
+        items:
+          $ref: '#/definitions/presenter.Attribute'
+        type: array
+    required:
+    - items
+    type: object
+  presenter.AttributeOption:
+    properties:
+      code:
+        description: Код варианта
+        example: crawler
+        type: string
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      nameEN:
+        description: Название на английском; пусто, пока нет перевода
+        example: Crawler
+        type: string
+      nameKK:
+        description: Название на казахском; пусто, пока нет перевода
+        example: Шынжыр табанды
+        type: string
+      nameRU:
+        description: Название на русском
+        example: Гусеничный
+        type: string
+      position:
+        description: Порядок вывода
+        example: 1
+        type: integer
+    required:
+    - code
+    - id
+    - nameEN
+    - nameKK
+    - nameRU
+    - position
+    type: object
+  presenter.AuthToken:
+    properties:
+      token:
+        description: Токен доступа
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/presenter.AuthUser'
+        description: Учётная запись
+    required:
+    - token
+    - user
+    type: object
+  presenter.AuthUser:
+    properties:
+      id:
+        description: Идентификатор пользователя
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      name:
+        description: |-
+          Name имя для показа; отсутствует, пока сотрудник его не задал.
+
+          Необязательное намеренно: подставлять вместо незаполненного имени
+          заглушку значило бы выдумывать её за человека, а клиенту в этом случае
+          есть что показать — телефон.
+        example: Иван Петров
+        type: string
+      phone:
+        description: Номер телефона
+        example: "+77001234567"
+        type: string
+      role:
+        example: manager
+        type: string
+    required:
+    - id
+    - phone
+    - role
+    type: object
+  presenter.AuthUserList:
+    properties:
+      items:
+        description: Сотрудники в порядке (роль, телефон)
+        items:
+          $ref: '#/definitions/presenter.AuthUser'
+        type: array
+    required:
+    - items
+    type: object
+  presenter.Category:
+    properties:
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      imagePath:
+        description: |-
+          ImagePath обложка, выбранная вручную. Пусто — её не выбирали.
+
+          Нужна админке: без неё редактор не отличит «я выбрал этот снимок»
+          от «сервис подставил, и так совпало».
+        example: categories/7c9e6679.jpg
+        type: string
+      imageURL:
+        description: |-
+          ImageURL адрес обложки раздела относительно корня API.
+
+          Заданная вручную, а если её нет — главное фото первой машины
+          поддерева. Клиент не знает, откуда она взялась, и знать не должен:
+          это одна картинка раздела. Пусто — в разделе нет ни одной
+          опубликованной машины с фотографией.
+        example: /media/categories/7c9e6679.jpg
+        type: string
+      isActive:
+        description: Видимость на сайте
+        example: true
+        type: boolean
+      nameEN:
+        description: Название на английском; пусто, пока нет перевода
+        example: Excavators
+        type: string
+      nameKK:
+        description: Название на казахском; пусто, пока нет перевода
+        example: Экскаваторлар
+        type: string
+      nameRU:
+        description: Название на русском
+        example: Экскаваторы
+        type: string
+      parentID:
+        description: Родительская категория; пусто — корень
+        example: ""
+        type: string
+      position:
+        description: Порядок вывода
+        example: 1
+        type: integer
+      slug:
+        description: Идентификатор в URL
+        example: excavators
+        type: string
+    required:
+    - id
+    - isActive
+    - nameEN
+    - nameKK
+    - nameRU
+    - position
+    - slug
+    type: object
+  presenter.CategoryList:
+    properties:
+      items:
+        description: Категории в порядке (родитель, position)
+        items:
+          $ref: '#/definitions/presenter.Category'
+        type: array
+    required:
+    - items
+    type: object
+  presenter.FXMarkup:
+    properties:
+      baseCurrency:
+        description: Валюта, из которой считаем
+        example: CNY
+        type: string
+      changedBy:
+        description: Кто задал; пусто — сервис
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      effectiveFrom:
+        description: С какого момента действует
+        example: "2026-09-01T00:00:00Z"
+        type: string
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      markupBps:
+        description: Наценка в базисных пунктах
+        example: 200
+        type: integer
+      quoteCurrency:
+        description: Валюта, в которую считаем
+        example: KZT
+        type: string
+    required:
+    - baseCurrency
+    - effectiveFrom
+    - id
+    - markupBps
+    - quoteCurrency
+    type: object
+  presenter.FXMarkupList:
+    properties:
+      items:
+        description: Наценки, свежие первыми
+        items:
+          $ref: '#/definitions/presenter.FXMarkup'
+        type: array
+    required:
+    - items
+    type: object
+  presenter.FXPairStatus:
+    properties:
+      baseCurrency:
+        description: Валюта, из которой считаем
+        example: CNY
+        type: string
+      effectiveRate:
+        description: |-
+          EffectiveRate применённый курс с наценкой — тот, по которому считается
+          цена. Пусто, если курса нет.
+        example: "74.001000"
+        type: string
+      effectiveRateDate:
+        description: EffectiveRateDate дата действующего курса.
+        example: "2026-09-01"
+        type: string
+      effectiveSource:
+        description: EffectiveSource кто поставил действующий курс.
+        example: manual
+        type: string
+      hasRate:
+        description: |-
+          HasRate есть ли по паре действующий курс. False означает, что цена
+          в этой валюте на витрине не показывается вовсе.
+        example: true
+        type: boolean
+      manualRate:
+        allOf:
+        - $ref: '#/definitions/presenter.FXRate'
+        description: ManualRate последний курс, введённый человеком.
+      markupBps:
+        description: MarkupBps действующая наценка на пару.
+        example: 200
+        type: integer
+      providerRate:
+        allOf:
+        - $ref: '#/definitions/presenter.FXRate'
+        description: ProviderRate последний курс внешнего источника — то, что он предлагает.
+      quoteCurrency:
+        description: Валюта, в которую считаем
+        example: KZT
+        type: string
+      stale:
+        description: Stale курс есть, но старше допустимого возраста.
+        example: false
+        type: boolean
+    required:
+    - baseCurrency
+    - hasRate
+    - quoteCurrency
+    type: object
+  presenter.FXRate:
+    properties:
+      baseCurrency:
+        description: Валюта, из которой считаем
+        example: CNY
+        type: string
+      fetchedAt:
+        description: Момент получения
+        example: "2026-09-01T09:00:00Z"
+        type: string
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      quoteCurrency:
+        description: Валюта, в которую считаем
+        example: KZT
+        type: string
+      rate:
+        description: Курс без наценки, строкой
+        example: "72.550000"
+        type: string
+      rateDate:
+        description: Дата, на которую действует курс
+        example: "2026-09-01"
+        type: string
+      source:
+        description: Кто поставил курс
+        example: manual
+        type: string
+    required:
+    - baseCurrency
+    - fetchedAt
+    - id
+    - quoteCurrency
+    - rate
+    - rateDate
+    - source
+    type: object
+  presenter.FXRateList:
+    properties:
+      items:
+        description: Курсы, свежие первыми
+        items:
+          $ref: '#/definitions/presenter.FXRate'
+        type: array
+    required:
+    - items
+    type: object
+  presenter.FXStatusList:
+    properties:
+      items:
+        description: Состояние по каждой паре
+        items:
+          $ref: '#/definitions/presenter.FXPairStatus'
+        type: array
+      showUsdPrice:
+        description: |-
+          ShowUsdPrice включён ли показ цены в долларах. Лежит здесь, а не
+          отдельной ручкой: админка показывает состояние пары CNY→USD и этот
+          флаг рядом — без него непонятно, важно ли отсутствие курса этой пары.
+        example: false
+        type: boolean
+    required:
+    - items
+    type: object
+  presenter.Lead:
+    properties:
+      allowedTransitions:
+        description: |-
+          AllowedTransitions статусы, в которые можно перевести заявку отсюда.
+
+          Приходит вместе с самой заявкой, а не отдельной справочной ручкой:
+          перечень зависит от текущего статуса, и справочник заставил бы клиента
+          держать у себя таблицу переходов и применять её самому — то есть
+          хранить копию правила, расхождение с которой обнаружилось бы только
+          отказом бэкенда.
+
+          Пустой список означает, что заявка завершена: won и lost терминальны.
+        example:
+        - in_progress
+        items:
+          type: string
+        type: array
+      city:
+        description: Город
+        example: Алматы
+        type: string
+      comment:
+        description: Комментарий менеджера
+        example: ""
+        type: string
+      createdAt:
+        description: Момент поступления
+        example: "2026-08-27T10:00:00Z"
+        type: string
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      machine:
+        allOf:
+        - $ref: '#/definitions/presenter.MachineRef'
+        description: |-
+          Machine краткая ссылка на карточку: то, что нужно показать в списке
+          и по чему перейти. Приходит вместе с machineID, когда машина указана.
+
+          Одного идентификатора мало: чтобы показать название, клиенту пришлось
+          бы тянуть карточку на каждую строку списка или весь каталог целиком.
+      machineID:
+        description: Машина
+        example: ""
+        type: string
+      manager:
+        allOf:
+        - $ref: '#/definitions/presenter.StaffRef'
+        description: |-
+          Manager краткая ссылка на учётную запись ответственного.
+
+          Одного идентификатора мало: список сотрудников доступен только
+          администратору, и менеджер, глядя на свою заявку, не смог бы
+          разрешить его вовсе.
+      managerID:
+        description: Ответственный менеджер
+        example: ""
+        type: string
+      message:
+        description: |-
+          Message то, что написал КЛИЕНТ в форме заявки.
+
+          Отдельно от comment намеренно: тот принадлежит менеджеру. В админке
+          их нельзя показывать одним полем — правка менеджера затёрла бы
+          единственную запись того, зачем человек обратился.
+        example: Нужен масляный фильтр на XE215C
+        type: string
+      name:
+        description: Имя клиента
+        example: Иван
+        type: string
+      phone:
+        description: Номер в нормализованном виде
+        example: "+77001112233"
+        type: string
+      quoteID:
+        description: Коммерческое предложение
+        example: ""
+        type: string
+      source:
+        description: Источник заявки
+        example: machine_card
+        type: string
+      status:
+        description: Стадия обработки
+        example: new
+        type: string
+      updatedAt:
+        description: Момент изменения
+        example: "2026-08-27T10:00:00Z"
+        type: string
+    required:
+    - allowedTransitions
+    - createdAt
+    - id
+    - name
+    - phone
+    - source
+    - status
+    - updatedAt
+    type: object
+  presenter.LeadAccepted:
+    properties:
+      id:
+        description: Идентификатор заявки
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      status:
+        description: Стадия обработки
+        example: new
+        type: string
+    required:
+    - id
+    - status
+    type: object
+  presenter.LeadList:
+    properties:
+      hasMore:
+        description: HasMore есть ли ещё заявки за этой страницей.
+        example: true
+        type: boolean
+      items:
+        description: Заявки, свежие сверху
+        items:
+          $ref: '#/definitions/presenter.Lead'
+        type: array
+      nextCursor:
+        description: |-
+          NextCursor курсор следующей страницы; пусто — страница последняя.
+
+          Непрозрачная строка: её содержимое — деталь реализации пагинации,
+          и клиент обязан возвращать её как есть, а не собирать сам.
+        example: ""
+        type: string
+      total:
+        description: |-
+          Total общее число найденных заявок.
+
+          Приходит только если клиент попросил его флагом withTotal: подсчёт —
+          отдельный запрос по тому же предикату.
+        example: 137
+        type: integer
+    required:
+    - hasMore
+    - items
+    - nextCursor
+    type: object
+  presenter.LeasingCalculation:
+    properties:
+      calculation:
+        allOf:
+        - $ref: '#/definitions/presenter.QuoteCalculation'
+        description: Calculation параметры и результат расчёта — те же, что и в предложении.
+      fx:
+        allOf:
+        - $ref: '#/definitions/presenter.LeasingCalculationFX'
+        description: FX курс, по которому выполнен расчёт.
+      priceCnyCents:
+        description: PriceCnyCents цена машины в фынях (1/100 юаня), взятая сервером
+          по слагу.
+        example: 8950000
+        type: integer
+    required:
+    - calculation
+    - fx
+    - priceCnyCents
+    type: object
+  presenter.LeasingCalculationFX:
+    properties:
+      rate:
+        description: |-
+          Rate применённый курс — уже с наценкой. Строкой, чтобы не потерять
+          младшие разряды на float64.
+        example: "532.786800"
+        type: string
+      rateDate:
+        description: |-
+          RateDate дата курса источника.
+
+          Приходит всегда: при отсутствии свежего курса расчёт выполнен
+          по последнему известному, и без даты это неразличимо.
+        example: "2026-08-27T00:00:00Z"
+        type: string
+    required:
+    - rate
+    - rateDate
+    type: object
+  presenter.LeasingProgram:
+    properties:
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      isActive:
+        description: |-
+          IsActive действует ли программа.
+
+          В публичной выдаче всегда true — она отдаёт только действующие;
+          в админской показывает выключенные, которые иначе выглядели бы
+          потерянными.
+        example: true
+        type: boolean
+      logoPath:
+        description: Путь к логотипу внутри хранилища
+        example: ""
+        type: string
+      logoURL:
+        description: LogoURL адрес логотипа относительно корня API; пусто — логотипа
+          нет.
+        example: /media/programs/halyk.png
+        type: string
+      maxAmountCnyCents:
+        description: Потолок суммы сделки
+        example: 50000000
+        type: integer
+      minDownPaymentBps:
+        description: Минимальный взнос в bps
+        example: 1500
+        type: integer
+      nameEN:
+        description: Название на английском; пусто, пока нет перевода
+        example: Halyk Leasing
+        type: string
+      nameKK:
+        description: Название на казахском; пусто, пока нет перевода
+        example: Halyk Leasing
+        type: string
+      nameRU:
+        description: Название на русском
+        example: Halyk Leasing
+        type: string
+      position:
+        description: Порядок вывода
+        example: 1
+        type: integer
+      rateMaxBps:
+        description: Верхняя граница ставки
+        example: 2400
+        type: integer
+      rateMinBps:
+        description: Нижняя граница ставки
+        example: 1800
+        type: integer
+      termMonthsMax:
+        description: Верхняя граница срока
+        example: 60
+        type: integer
+      termMonthsMin:
+        description: Нижняя граница срока
+        example: 12
+        type: integer
+    required:
+    - id
+    - isActive
+    - minDownPaymentBps
+    - nameEN
+    - nameKK
+    - nameRU
+    - position
+    - rateMaxBps
+    - rateMinBps
+    - termMonthsMax
+    - termMonthsMin
+    type: object
+  presenter.LeasingProgramList:
+    properties:
+      items:
+        description: Действующие программы
+        items:
+          $ref: '#/definitions/presenter.LeasingProgram'
+        type: array
+    required:
+    - items
+    type: object
+  presenter.Machine:
+    properties:
+      attributeValues:
+        description: Значения характеристик
+        items:
+          $ref: '#/definitions/presenter.MachineAttributeValue'
+        type: array
+      availability:
+        description: Наличие
+        example: in_stock
+        type: string
+      brand:
+        description: Бренд
+        example: XCMG
+        type: string
+      categoryID:
+        description: Категория
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      condition:
+        description: Состояние
+        example: new
+        type: string
+      deliveryWeeks:
+        description: Срок поставки в неделях
+        example: 8
+        type: integer
+      descriptionEN:
+        description: Описание на английском
+        example: ""
+        type: string
+      descriptionKK:
+        description: Описание на казахском
+        example: ""
+        type: string
+      descriptionRU:
+        description: Описание на русском
+        example: ""
+        type: string
+      fuelConsumptionLph:
+        description: |-
+          FuelConsumptionLph, ServiceIntervalHours и ServiceCostCnyCents —
+          величины для расчёта стоимости владения.
+
+          Отсутствуют, если не заведены: пустое поле означает «нет данных»,
+          и подменять его нулём нельзя — ноль здесь читался бы как «не расходует
+          топлива». Расход строкой по той же причине, что и число характеристики:
+          он дробный, и float64 на границе контракта теряет младший разряд.
+        example: "12.7"
+        type: string
+      fxRateDate:
+        description: |-
+          FXRateDate дата курса, по которому пересчитана цена.
+
+          Приходит только вместе с priceKztCents и обязательна при ней: применённый
+          курс при отсутствии свежего — это последний известный, и без даты
+          вчерашний курс неотличим от сегодняшнего. Наценка наружу не выносится:
+          она уже внутри курса, а её размер посетителю знать незачем.
+        example: "2026-08-27T00:00:00Z"
+        type: string
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      images:
+        description: Фотографии
+        items:
+          $ref: '#/definitions/presenter.MachineImage'
+        type: array
+      isActive:
+        description: Опубликована ли карточка
+        example: true
+        type: boolean
+      isPricePublic:
+        description: IsPricePublic показывается ли цена на витрине.
+        example: true
+        type: boolean
+      model:
+        description: Модель
+        example: XE215C
+        type: string
+      nameEN:
+        description: Название на английском; пусто, пока нет перевода
+        example: XCMG XE215C excavator
+        type: string
+      nameKK:
+        description: Название на казахском; пусто, пока нет перевода
+        example: XCMG XE215C экскаваторы
+        type: string
+      nameRU:
+        description: Название на русском
+        example: Экскаватор XCMG XE215C
+        type: string
+      priceCnyCents:
+        description: PriceCNYCents цена в фынях (1/100 юаня). Пусто, если цена скрыта
+          за формой запроса.
+        example: 8950000
+        type: integer
+      priceKztCents:
+        description: |-
+          PriceKZTCents цена в тиынах по действующему курсу; отсутствует, когда
+          курса нет или цена скрыта на витрине.
+
+          Пересчёт справочный: он не фиксируется и меняется вместе с курсом.
+          Зафиксированную цену даёт только выпущенное коммерческое предложение.
+        example: 4675943000
+        type: integer
+      priceUsdCents:
+        description: |-
+          PriceUSDCents цена в центах — второе, НЕОБЯЗАТЕЛЬНОЕ отображение.
+
+          Приходит, только когда показ доллара включён настройкой и курс пары
+          есть. Отображением всё и ограничивается: ни лизинг, ни стоимость
+          владения, ни коммерческое предложение доллар не используют — они
+          считаются от юаня и тенге.
+        example: 1243000
+        type: integer
+      primaryImage:
+        allOf:
+        - $ref: '#/definitions/presenter.MachineImage'
+        description: |-
+          PrimaryImage главное фото карточки.
+
+          Существует ради списков: плитке каталога нужна одна картинка, и тянуть
+          ради неё всю галерею — это десятки лишних строк на страницу. В выдаче
+          поиска приходит только оно, images там пусто; на самой карточке приходят
+          оба поля, и primaryImage там — та же фотография, что помечена isPrimary
+          внутри images.
+
+          Необязательное: у карточки может не быть ни одной фотографии.
+      productionYear:
+        description: Год выпуска
+        example: 2024
+        type: integer
+      publishedAt:
+        description: Дата первой публикации
+        example: "2026-08-27T10:00:00Z"
+        type: string
+      serviceCostCnyCents:
+        example: 120000
+        type: integer
+      serviceIntervalHours:
+        example: 500
+        type: integer
+      slug:
+        description: Идентификатор в URL
+        example: xcmg-xe215c
+        type: string
+      usdRateDate:
+        description: |-
+          USDRateDate дата курса, по которому получена цена в долларах.
+
+          Своя, а не общая с тенге: пары разные, и курс одной бывает свежее
+          курса другой.
+        example: "2026-08-27T00:00:00Z"
+        type: string
+    required:
+    - availability
+    - brand
+    - categoryID
+    - condition
+    - id
+    - isActive
+    - isPricePublic
+    - model
+    - nameEN
+    - nameKK
+    - nameRU
+    - slug
+    type: object
+  presenter.MachineAttributeValue:
+    properties:
+      attributeID:
+        description: Характеристика
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      code:
+        description: Код варианта
+        example: crawler
+        type: string
+      dataType:
+        description: Тип значения
+        example: number
+        type: string
+      flag:
+        description: Значение флага
+        example: true
+        type: boolean
+      number:
+        description: Числовое значение
+        example: "155"
+        type: string
+      text:
+        description: Строковое значение
+        example: ""
+        type: string
+    required:
+    - attributeID
+    - dataType
+    type: object
+  presenter.MachineImage:
+    properties:
+      altEN:
+        description: Подпись на английском
+        example: ""
+        type: string
+      altKK:
+        description: Подпись на казахском
+        example: ""
+        type: string
+      altRU:
+        description: Подпись на русском
+        example: ""
+        type: string
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      isPrimary:
+        description: Главное фото
+        example: true
+        type: boolean
+      path:
+        description: Путь внутри хранилища
+        example: machines/xcmg-xe215c-1.jpg
+        type: string
+      position:
+        description: Порядок показа
+        example: 0
+        type: integer
+      url:
+        description: |-
+          URL адрес фотографии относительно корня API: клиент дописывает его
+          к тому же адресу, по которому обращается к каталогу.
+        example: /media/machines/xcmg-xe215c-1.jpg
+        type: string
+    required:
+    - id
+    - isPrimary
+    - path
+    - position
+    - url
+    type: object
+  presenter.MachineImageList:
+    properties:
+      items:
+        description: Фотографии в порядке показа
+        items:
+          $ref: '#/definitions/presenter.MachineImage'
+        type: array
+    required:
+    - items
+    type: object
+  presenter.MachinePage:
+    properties:
+      hasMore:
+        description: HasMore есть ли ещё карточки за этой страницей.
+        example: true
+        type: boolean
+      items:
+        description: Items карточки страницы.
+        items:
+          $ref: '#/definitions/presenter.Machine'
+        type: array
+      nextCursor:
+        description: |-
+          NextCursor курсор следующей страницы; пусто — страница последняя.
+
+          Непрозрачная строка: её содержимое — деталь реализации пагинации,
+          и клиент обязан возвращать её как есть, а не собирать сам.
+        example: ""
+        type: string
+      total:
+        description: |-
+          Total общее число найденных карточек.
+
+          Приходит только если клиент попросил его флагом withTotal: точный
+          подсчёт при keyset-пагинации — отдельный запрос по тому же предикату,
+          и он обязан просмотреть все подходящие строки.
+        example: 137
+        type: integer
+    required:
+    - hasMore
+    - items
+    type: object
+  presenter.MachineRef:
+    properties:
+      categorySlug:
+        description: |-
+          CategorySlug слаг категории карточки.
+
+          Нужен для перехода: адрес карточки на витрине вложен в категорию
+          (/catalog/{категория}/{машина}), и одного слага машины для ссылки мало.
+        example: excavators
+        type: string
+      id:
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      nameRU:
+        example: Экскаватор XCMG XE215C
+        type: string
+      slug:
+        example: xcmg-xe215c
+        type: string
+    required:
+    - categorySlug
+    - id
+    - nameRU
+    - slug
+    type: object
+  presenter.PriceSettings:
+    properties:
+      showUsdPrice:
+        description: ShowUSDPrice показывать ли цену в долларах на витрине.
+        example: true
+        type: boolean
+    type: object
+  presenter.Quote:
+    properties:
+      calculation:
+        allOf:
+        - $ref: '#/definitions/presenter.QuoteCalculation'
+        description: Параметры и результат расчёта
+      configuration:
+        additionalProperties: {}
+        description: Выбранная комплектация
+        type: object
+      createdAt:
+        description: Момент выпуска
+        example: "2026-08-27T10:00:00Z"
+        type: string
+      expiresAt:
+        description: Срок годности
+        example: "2026-09-10T10:00:00Z"
+        type: string
+      firstOpenedAt:
+        description: Момент первого открытия
+        type: string
+      fx:
+        allOf:
+        - $ref: '#/definitions/presenter.QuoteFX'
+        description: Зафиксированный курс
+      id:
+        description: Идентификатор
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      isExpired:
+        description: Истекло ли предложение
+        example: false
+        type: boolean
+      machine:
+        allOf:
+        - $ref: '#/definitions/presenter.Machine'
+        description: |-
+          Machine машина предложения целиком: с фотографиями, характеристиками
+          и ценой по зафиксированному курсу. Приходит там, где предложение читают
+          по одному, — на публичной странице и в карточке предложения.
+      machineRef:
+        allOf:
+        - $ref: '#/definitions/presenter.MachineRef'
+        description: |-
+          MachineRef краткая ссылка на карточку: название и то, по чему перейти.
+
+          Приходит в списке вместо Machine. Читать полную карточку на каждую
+          строку списка значило бы делать запрос на строку ради одного названия,
+          а отдавать пустой объект «машины» — врать про её отсутствие.
+      priceCnyCents:
+        description: Цена машины в фынях (1/100 юаня)
+        example: 8950000
+        type: integer
+    required:
+    - calculation
+    - createdAt
+    - expiresAt
+    - fx
+    - id
+    - isExpired
+    - priceCnyCents
+    type: object
+  presenter.QuoteCalculation:
+    properties:
+      assetCostKztCents:
+        description: Стоимость машины в тиынах
+        example: 4675943000
+        type: integer
+      commissionKztCents:
+        description: Комиссия за организацию
+        example: 0
+        type: integer
+      downPaymentBps:
+        description: Первоначальный взнос в bps
+        example: 2000
+        type: integer
+      downPaymentKztCents:
+        description: Первоначальный взнос в тиынах
+        example: 935188600
+        type: integer
+      financedAmountKztCents:
+        description: Сумма финансирования
+        example: 3740754400
+        type: integer
+      lastPaymentKztCents:
+        description: Последний платёж
+        example: 143214500
+        type: integer
+      leasingProgramID:
+        description: Программа лизинга
+        example: ""
+        type: string
+      leasingProgramName:
+        description: |-
+          LeasingProgramName название программы, по которой считали.
+
+          Одного идентификатора мало: публичный справочник отдаёт только
+          действующие программы, и у предложения, выпущенного по с тех пор
+          выключенной, название взять было бы негде.
+        example: Halyk Leasing
+        type: string
+      monthlyPaymentKztCents:
+        description: Регулярный платёж
+        example: 143214400
+        type: integer
+      overpaymentKztCents:
+        description: Переплата
+        example: 1414964100
+        type: integer
+      rateBps:
+        description: Ставка в bps
+        example: 1800
+        type: integer
+      residualValueKztCents:
+        description: Выкупная стоимость
+        example: 0
+        type: integer
+      schedule:
+        description: |-
+          Schedule полный график платежей.
+
+          Приходит там, где предложение читают по одному: на публичной странице
+          и в карточке предложения. В списке его нет — см. NewQuoteList.
+        items:
+          $ref: '#/definitions/presenter.QuotePayment'
+        type: array
+      scheduleType:
+        description: Тип графика
+        example: annuity
+        type: string
+      termMonths:
+        description: Срок в месяцах
+        example: 36
+        type: integer
+      totalInterestKztCents:
+        description: Проценты за срок
+        example: 1414964100
+        type: integer
+      totalPaidKztCents:
+        description: Итого выплат
+        example: 5155718500
+        type: integer
+    required:
+    - assetCostKztCents
+    - commissionKztCents
+    - downPaymentBps
+    - downPaymentKztCents
+    - financedAmountKztCents
+    - lastPaymentKztCents
+    - monthlyPaymentKztCents
+    - overpaymentKztCents
+    - rateBps
+    - residualValueKztCents
+    - scheduleType
+    - termMonths
+    - totalInterestKztCents
+    - totalPaidKztCents
+    type: object
+  presenter.QuoteFX:
+    properties:
+      markupBps:
+        description: MarkupBps наценка, зашитая в курс.
+        example: 200
+        type: integer
+      rate:
+        description: |-
+          Rate применённый курс — уже с наценкой. Строкой, чтобы не потерять
+          младшие разряды на float64.
+        example: "532.786800"
+        type: string
+      rateDate:
+        description: RateDate дата курса источника.
+        example: "2026-08-27T00:00:00Z"
+        type: string
+    required:
+    - markupBps
+    - rate
+    - rateDate
+    type: object
+  presenter.QuoteIssued:
+    properties:
+      publicToken:
+        description: PublicToken токен публичной ссылки.
+        example: IEkYYm4kQ0lLZ1hnR2dnUlZUR0FBQUFBQUFBQUFBQQ
+        type: string
+      quote:
+        allOf:
+        - $ref: '#/definitions/presenter.Quote'
+        description: Выпущенное предложение
+    required:
+    - publicToken
+    - quote
+    type: object
+  presenter.QuoteList:
+    properties:
+      items:
+        description: Предложения, свежие сверху
+        items:
+          $ref: '#/definitions/presenter.Quote'
+        type: array
+    required:
+    - items
+    type: object
+  presenter.QuotePayment:
+    properties:
+      amount:
+        description: Сумма платежа
+        example: 14321440
+        type: integer
+      balance:
+        description: Остаток долга после платежа
+        example: 366057040
+        type: integer
+      interest:
+        description: Часть процентов
+        example: 6450000
+        type: integer
+      number:
+        description: Номер платежа
+        example: 1
+        type: integer
+      principal:
+        description: Часть основного долга
+        example: 7871440
+        type: integer
+    required:
+    - amount
+    - balance
+    - interest
+    - number
+    - principal
+    type: object
+  presenter.ResidualValueCurve:
+    properties:
+      annualDropBps:
+        description: AnnualDropBps сколько теряется за каждый следующий год от остатка.
+        example: 1200
+        type: integer
+      categoryID:
+        description: CategoryID раздел, для которого заведена кривая.
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      firstYearDropBps:
+        description: FirstYearDropBps сколько техника теряет за первый год.
+        example: 2000
+        type: integer
+      floorBps:
+        description: FloorBps доля, ниже которой стоимость не опускается.
+        example: 2000
+        type: integer
+      preview:
+        description: Preview доли по годам, посчитанные по кривой.
+        items:
+          $ref: '#/definitions/presenter.ResidualValueYear'
+        type: array
+    type: object
+  presenter.ResidualValueCurveList:
+    properties:
+      items:
+        description: Items кривые, заведённые в справочнике.
+        items:
+          $ref: '#/definitions/presenter.ResidualValueCurve'
+        type: array
+    type: object
+  presenter.ResidualValueYear:
+    properties:
+      rateBps:
+        description: RateBps доля цены, которую техника сохраняет к концу года.
+        example: 6195
+        type: integer
+      year:
+        description: Year год владения.
+        example: 3
+        type: integer
+    type: object
+  presenter.StaffRef:
+    properties:
+      id:
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        type: string
+      name:
+        example: Иван Петров
+        type: string
+      phone:
+        example: "+77001112233"
+        type: string
+    required:
+    - id
+    - phone
+    type: object
+  presenter.TCOItem:
+    properties:
+      amountKztCents:
+        description: AmountKztCents сумма статьи за срок. Отсутствует — статья не
+          посчитана.
+        example: 12000000
+        type: integer
+      missing:
+        description: |-
+          Missing величина, которой не хватило. Пусто — статья посчитана.
+
+          Список, а не одно значение: статья «обслуживание» требует и интервала,
+          и стоимости, и не хватить может обоих сразу.
+        example:
+        - fuel_consumption
+        items:
+          type: string
+        type: array
+    type: object
+  presenter.TCOResult:
+    properties:
+      complete:
+        description: |-
+          Complete посчитаны ли все статьи.
+
+          Отдельным полем, хотя выводится из missing: клиент решает по нему,
+          показывать ли расчёт вообще, и заставлять его собирать это из пяти
+          вложенных списков значило бы разложить одно решение по пяти местам.
+        example: false
+        type: boolean
+      costPerHourKztCents:
+        description: CostPerHourKztCents стоимость моточаса.
+        example: 347700
+        type: integer
+      fuel:
+        allOf:
+        - $ref: '#/definitions/presenter.TCOItem'
+        description: Fuel топливо за срок.
+      fx:
+        allOf:
+        - $ref: '#/definitions/presenter.QuoteFX'
+        description: FX курс, которым цена машины приведена к тенге.
+      machineRef:
+        allOf:
+        - $ref: '#/definitions/presenter.MachineRef'
+        description: Machine карточка, по которой считали.
+      missing:
+        description: Missing все недостающие величины одним списком.
+        example:
+        - fuel_consumption
+        items:
+          type: string
+        type: array
+      operator:
+        allOf:
+        - $ref: '#/definitions/presenter.TCOItem'
+        description: Operator оплата труда оператора за срок.
+      purchase:
+        allOf:
+        - $ref: '#/definitions/presenter.TCOItem'
+        description: 'Purchase покупка машины: цена карточки, приведённая к тенге.'
+      residualValue:
+        allOf:
+        - $ref: '#/definitions/presenter.TCOItem'
+        description: 'ResidualValue остаточная стоимость на конец срока: вычитается
+          из итога.'
+      service:
+        allOf:
+        - $ref: '#/definitions/presenter.TCOItem'
+        description: Service плановое обслуживание за срок.
+      servicesCount:
+        description: ServicesCount число плановых обслуживаний за срок.
+        example: 12
+        type: integer
+      totalHours:
+        description: TotalHours наработка за весь срок в моточасах.
+        example: 6000
+        type: integer
+      totalKztCents:
+        description: |-
+          TotalKztCents итог за срок: сумма посчитанных статей за вычетом
+          остаточной стоимости. Непосчитанные статьи в него не входят — читать
+          итог, не посмотрев на missing, нельзя.
+        example: 20860000
+        type: integer
+    required:
+    - complete
+    - costPerHourKztCents
+    - fuel
+    - fx
+    - missing
+    - operator
+    - purchase
+    - residualValue
+    - service
+    - totalHours
+    - totalKztCents
+    type: object
+  presenter.UploadedFile:
+    properties:
+      path:
+        description: Путь внутри хранилища
+        example: machines/7c9e6679-7425-40de-944b-e07fc1f90ae7.jpg
+        type: string
+      url:
+        description: URL адрес файла относительно корня API, как и у фотографии карточки.
+        example: /media/machines/7c9e6679-7425-40de-944b-e07fc1f90ae7.jpg
+        type: string
+    required:
+    - path
+    - url
+    type: object
+  swagger.HTTPResponse400:
+    properties:
+      code:
+        description: Стабильный код ошибки.
+        example: SNT_SLUG_ALREADY_USED
+        type: string
+      message:
+        description: Описание ошибки для человека.
+        example: слаг уже занят
+        type: string
+    required:
+    - code
+    - message
+    type: object
+  swagger.HTTPResponse500:
+    properties:
+      code:
+        description: Стабильный код ошибки.
+        example: SNT_INTERNAL
+        type: string
+      message:
+        description: Описание ошибки для человека.
+        example: внутренняя ошибка сервиса
+        type: string
+    required:
+    - code
+    - message
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8000
+info:
+  contact: {}
+  description: 'Backend каталога спецтехники: карточки с ценами в USD, пересчёт в
+    тенге по курсу с наценкой, калькулятор лизинга, коммерческие предложения и заявки'
+  title: Techline API
+  version: "1.0"
+paths:
+  /v1/admin/catalog/attributes:
+    post:
+      consumes:
+      - application/json
+      description: Создаёт характеристику вместе с набором вариантов enum
+      parameters:
+      - description: Характеристика
+        in: body
+        name: attribute
+        required: true
+        schema:
+          $ref: '#/definitions/form.AttributeSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Attribute'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Создание характеристики
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/attributes/{attributeID}:
+    delete:
+      description: 'Необратимая операция: каскад схемы уносит варианты и заполненные
+        значения всех карточек категории'
+      parameters:
+      - description: Идентификатор характеристики
+        in: path
+        name: attributeID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Характеристика удалена
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Характеристика не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Удаление характеристики
+      tags:
+      - catalog-admin
+    put:
+      consumes:
+      - application/json
+      description: Заменяет характеристику вместе с набором вариантов enum. Смена
+        типа у характеристики с заполненными значениями отвергается
+      parameters:
+      - description: Идентификатор характеристики
+        in: path
+        name: attributeID
+        required: true
+        type: string
+      - description: Характеристика
+        in: body
+        name: attribute
+        required: true
+        schema:
+          $ref: '#/definitions/form.AttributeSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Attribute'
+        "400":
+          description: 'Код ошибки: например, смена типа у заполненной характеристики'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Характеристика не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Изменение характеристики
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/categories:
+    get:
+      description: Полное дерево категорий, включая скрытые с сайта
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.CategoryList'
+        "401":
+          description: Запрос не аутентифицирован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Категории (админка)
+      tags:
+      - catalog-admin
+    post:
+      consumes:
+      - application/json
+      description: Занятый слаг возвращает 409
+      parameters:
+      - description: Категория
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/form.CategorySave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Category'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "409":
+          description: Слаг уже занят
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Создание категории
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/categories/{categoryID}:
+    delete:
+      description: 'Необратимая операция: каскад схемы уносит характеристики категории
+        и заполненные значения всех её карточек. Категория с потомками или карточками
+        не удаляется'
+      parameters:
+      - description: Идентификатор категории
+        in: path
+        name: categoryID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Категория удалена
+        "400":
+          description: У категории есть потомки или карточки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Категория не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Удаление категории
+      tags:
+      - catalog-admin
+    put:
+      consumes:
+      - application/json
+      description: Занятый слаг возвращает 409, попытка сделать категорию собственным
+        предком — 400
+      parameters:
+      - description: Идентификатор категории
+        in: path
+        name: categoryID
+        required: true
+        type: string
+      - description: Категория
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/form.CategorySave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Category'
+        "400":
+          description: 'Код ошибки: например, цикл в дереве'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Категория не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "409":
+          description: Слаг уже занят
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Изменение категории
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/categories/{categoryID}/attributes:
+    get:
+      description: Характеристики вместе с вариантами для типа enum
+      parameters:
+      - description: Идентификатор категории
+        in: path
+        name: categoryID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AttributeList'
+        "401":
+          description: Запрос не аутентифицирован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Характеристики категории (админка)
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/machines:
+    post:
+      consumes:
+      - application/json
+      description: Карточка, её характеристики и фотографии пишутся одной транзакцией.
+        Занятый слаг возвращает 409
+      parameters:
+      - description: Карточка
+        in: body
+        name: machine
+        required: true
+        schema:
+          $ref: '#/definitions/form.MachineSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Machine'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "409":
+          description: Слаг уже занят
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Создание карточки
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/machines/{machineID}:
+    delete:
+      description: 'Необратимая операция: каскад схемы уносит значения характеристик
+        и фотографии карточки, а файлы снимков удаляются, если на них не ссылается
+        другая карточка. Карточка с выпущенным КП не удаляется — её снимают с публикации'
+      parameters:
+      - description: Идентификатор карточки
+        in: path
+        name: machineID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Карточка удалена
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "409":
+          description: По карточке выпущены коммерческие предложения
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Удаление карточки
+      tags:
+      - catalog-admin
+    put:
+      consumes:
+      - application/json
+      description: Заменяет карточку целиком вместе с характеристиками и фотографиями
+        — одной транзакцией. Занятый другим слаг возвращает 409
+      parameters:
+      - description: Идентификатор карточки
+        in: path
+        name: machineID
+        required: true
+        type: string
+      - description: Карточка
+        in: body
+        name: machine
+        required: true
+        schema:
+          $ref: '#/definitions/form.MachineSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Machine'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "409":
+          description: Слаг уже занят
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Изменение карточки
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/machines/{machineID}/images:
+    get:
+      description: Фотографии в порядке показа
+      parameters:
+      - description: Идентификатор карточки
+        in: path
+        name: machineID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.MachineImageList'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Фотографии карточки
+      tags:
+      - catalog-admin
+    put:
+      consumes:
+      - application/json
+      description: 'Заменяет набор целиком: пустой набор очищает галерею. Главной
+        может быть не более одной фотографии'
+      parameters:
+      - description: Идентификатор карточки
+        in: path
+        name: machineID
+        required: true
+        type: string
+      - description: Набор фотографий
+        in: body
+        name: images
+        required: true
+        schema:
+          $ref: '#/definitions/form.MachineImagesReplace'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.MachineImageList'
+        "400":
+          description: 'Код ошибки: например, две главные фотографии'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Замена фотографий
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/machines/{machineID}/images/{imageID}/primary:
+    post:
+      description: 'Снимает признак с остальных фотографий одним запросом: состояния
+        с двумя главными не существует'
+      parameters:
+      - description: Идентификатор карточки
+        in: path
+        name: machineID
+        required: true
+        type: string
+      - description: Идентификатор фотографии
+        in: path
+        name: imageID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.MachineImageList'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка или фотография не найдены
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Назначение главного фото
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/machines/{machineID}/publish:
+    post:
+      description: 'Делает карточку видимой на витрине и проставляет дату первой публикации.
+        Повторная публикация дату не сбрасывает: она задаёт место в ленте'
+      parameters:
+      - description: Идентификатор карточки
+        in: path
+        name: machineID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Machine'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Публикация карточки
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/machines/{machineID}/unpublish:
+    post:
+      description: Скрывает карточку с витрины, сохраняя дату первой публикации
+      parameters:
+      - description: Идентификатор карточки
+        in: path
+        name: machineID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Machine'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Снятие карточки с публикации
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/machines/{slug}:
+    get:
+      description: Любая карточка, включая неопубликованную, вместе с характеристиками
+        и фотографиями
+      parameters:
+      - description: Идентификатор карточки в URL
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Machine'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Карточка техники (админка)
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/machines/search:
+    post:
+      consumes:
+      - application/json
+      description: Поиск по всему каталогу, включая неопубликованные карточки. Цена
+        отдаётся всегда, даже когда скрыта на витрине. Отбор isActive показывает только
+        опубликованные или только черновики; query ищет подстроку в названии, бренде
+        и модели
+      parameters:
+      - description: Условия поиска
+        in: body
+        name: filter
+        required: true
+        schema:
+          $ref: '#/definitions/form.MachineSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.MachinePage'
+        "400":
+          description: 'Код ошибки: невалидный фильтр или испорченный курсор'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Поиск по каталогу (админка)
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/residual-curves:
+    get:
+      description: Все заведённые кривые вместе с посчитанными по ним долями по годам.
+        Разделы без своей кривой сюда не попадают — они наследуют кривую предка
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.ResidualValueCurveList'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Кривые остаточной стоимости
+      tags:
+      - catalog-admin
+  /v1/admin/catalog/residual-curves/{categoryID}:
+    delete:
+      description: После удаления раздел наследует кривую предка, а если её нет ни
+        у кого — расчёт владения снова честно скажет, что остаточной стоимости не
+        знает
+      parameters:
+      - description: Идентификатор раздела
+        in: path
+        name: categoryID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: У раздела нет своей кривой
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Удаление кривой остаточной стоимости
+      tags:
+      - catalog-admin
+    get:
+      description: 'Кривая, заведённая ИМЕННО для этого раздела. Вверх по дереву не
+        поднимается: справочник показывает своё, а не унаследованное, иначе редактор
+        принял бы кривую предка за собственную и завёл бы её копию'
+      parameters:
+      - description: Идентификатор раздела
+        in: path
+        name: categoryID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.ResidualValueCurve'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: У раздела нет своей кривой
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Кривая остаточной стоимости раздела
+      tags:
+      - catalog-admin
+    put:
+      consumes:
+      - application/json
+      description: 'Кривая задаётся тремя числами целиком, а не строкой на каждый
+        год: тридцать чисел на раздел руками не заводят. Заводит кривую раздела или
+        переписывает её — у раздела она ровно одна. Возвращает кривую вместе с посчитанными
+        долями по годам'
+      parameters:
+      - description: Идентификатор раздела
+        in: path
+        name: categoryID
+        required: true
+        type: string
+      - description: Кривая остаточной стоимости
+        in: body
+        name: curve
+        required: true
+        schema:
+          $ref: '#/definitions/form.ResidualValueCurveSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.ResidualValueCurve'
+        "400":
+          description: 'Код ошибки: доли вне границ или порог выше остатка первого
+            года'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Раздел не найден
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Сохранение кривой остаточной стоимости
+      tags:
+      - catalog-admin
+  /v1/admin/fx/markups:
+    get:
+      description: Наценки пары, свежие первыми. Действующая — первая, у которой момент
+        вступления не в будущем
+      parameters:
+      - description: Валюта, из которой считаем
+        in: query
+        name: base
+        required: true
+        type: string
+      - description: Валюта, в которую считаем
+        in: query
+        name: quote
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.FXMarkupList'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Не авторизован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Недостаточно прав
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: История наценок
+      tags:
+      - admin-fx
+    post:
+      consumes:
+      - application/json
+      description: 'Наценка своя у каждой пары. История сохраняется: прежняя запись
+        остаётся и объясняет цену в ранее выданных предложениях'
+      parameters:
+      - description: Наценка
+        in: body
+        name: markup
+        required: true
+        schema:
+          $ref: '#/definitions/form.FXMarkupSave'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.FXMarkup'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Не авторизован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Недостаточно прав
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Задать наценку
+      tags:
+      - admin-fx
+  /v1/admin/fx/rates:
+    get:
+      description: 'Курсы, введённые человеком, свежие первыми. Загруженные воркером
+        сюда не попадают: их история — это история источника, а не решений администратора'
+      parameters:
+      - description: Валюта, из которой считаем
+        in: query
+        name: base
+        required: true
+        type: string
+      - description: Валюта, в которую считаем
+        in: query
+        name: quote
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.FXRateList'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Не авторизован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: История ручных курсов
+      tags:
+      - admin-fx
+    post:
+      consumes:
+      - application/json
+      description: 'Ручной курс заменяет курс внешнего источника за ту же дату. Повторный
+        ввод за ту же дату — исправление опечатки: создаётся новая запись, прежняя
+        остаётся в истории'
+      parameters:
+      - description: Курс
+        in: body
+        name: rate
+        required: true
+        schema:
+          $ref: '#/definitions/form.FXRateSave'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.FXRate'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Не авторизован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Ввести курс вручную
+      tags:
+      - admin-fx
+  /v1/admin/fx/settings:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.PriceSettings'
+        "401":
+          description: Не авторизован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Недостаточно прав
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+      security:
+      - BearerAuth: []
+      summary: Настройки показа цены
+      tags:
+      - admin-fx
+    put:
+      consumes:
+      - application/json
+      description: Доллар считается из юаня по паре CNY→USD со своей наценкой, а не
+        хранится отдельно. Включение без заданного курса этой пары оставит цену в
+        долларах пустой — состояние курса видно в ручке состояния
+      parameters:
+      - description: Настройки
+        in: body
+        name: settings
+        required: true
+        schema:
+          $ref: '#/definitions/form.PriceSettingsSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.PriceSettings'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Не авторизован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Недостаточно прав
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Изменить настройки показа цены
+      tags:
+      - admin-fx
+  /v1/admin/fx/status:
+    get:
+      description: Действующий курс каждой пары, что предложил внешний источник, что
+        ввёл человек, признак устаревания. Пара второго отображения приходит всегда
+        — по ней видно, готова ли витрина показывать цену в долларах
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.FXStatusList'
+        "401":
+          description: Не авторизован
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Состояние курсов
+      tags:
+      - admin-fx
+  /v1/admin/leads:
+    get:
+      description: 'Заявки с фильтром по статусу и ответственному менеджеру, свежие
+        сверху. Keyset-пагинация: курсор следующей страницы приходит в ответе. Общее
+        число считается только по запросу'
+      parameters:
+      - description: 'Статус: new, in_progress, won, lost'
+        in: query
+        name: status
+        type: string
+      - description: Ответственный менеджер
+        in: query
+        name: managerID
+        type: string
+      - description: Размер страницы
+        in: query
+        name: limit
+        type: integer
+      - description: Курсор следующей страницы из предыдущего ответа
+        in: query
+        name: cursor
+        type: string
+      - description: Посчитать общее число найденных заявок
+        in: query
+        name: withTotal
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.LeadList'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Заявки
+      tags:
+      - quotes-admin
+  /v1/admin/leads/{leadID}:
+    delete:
+      description: 'Удаляет заявку вместе с контактом клиента, без следа. Существует
+        ради требования человека убрать свои персональные данные — статусом такое
+        не исполняется. Выпущенное по заявке предложение удаление переживает: обязательство
+        перед клиентом не исчезает оттого, что прибрали заявку. Предложения, в отличие
+        от заявок, не удаляются вовсе — они истекают'
+      parameters:
+      - description: Идентификатор заявки
+        in: path
+        name: leadID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Заявка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Удаление заявки
+      tags:
+      - quotes-admin
+    get:
+      description: Заявка по идентификатору
+      parameters:
+      - description: Идентификатор заявки
+        in: path
+        name: leadID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Lead'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Заявка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Заявка
+      tags:
+      - quotes-admin
+  /v1/admin/leads/{leadID}/assign:
+    post:
+      consumes:
+      - application/json
+      description: 'Назначает менеджера, ответственного за заявку. Не зависит от статуса:
+        распределение — вопрос загрузки людей, а не стадии обработки'
+      parameters:
+      - description: Идентификатор заявки
+        in: path
+        name: leadID
+        required: true
+        type: string
+      - description: Ответственный менеджер
+        in: body
+        name: assign
+        required: true
+        schema:
+          $ref: '#/definitions/form.LeadAssign'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Lead'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Заявка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Назначение ответственного
+      tags:
+      - quotes-admin
+  /v1/admin/leads/{leadID}/comment:
+    post:
+      consumes:
+      - application/json
+      description: Заменяет заметку менеджера целиком; пустая строка её стирает. Сообщение
+        клиента (message) этой ручкой не меняется — это разные поля, и правка менеджера
+        не должна затирать запрос клиента
+      parameters:
+      - description: Идентификатор заявки
+        in: path
+        name: leadID
+        required: true
+        type: string
+      - description: Комментарий менеджера
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/form.LeadComment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Lead'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Заявка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Комментарий менеджера к заявке
+      tags:
+      - quotes-admin
+  /v1/admin/leads/{leadID}/status:
+    post:
+      consumes:
+      - application/json
+      description: Переводит заявку по таблице переходов new → in_progress → won|lost.
+        Недопустимый переход отвергается
+      parameters:
+      - description: Идентификатор заявки
+        in: path
+        name: leadID
+        required: true
+        type: string
+      - description: Целевой статус
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/form.LeadStatusChange'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Lead'
+        "400":
+          description: Недопустимый переход статуса
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Заявка не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Смена статуса заявки
+      tags:
+      - quotes-admin
+  /v1/admin/leasing-programs:
+    get:
+      description: 'Все программы, включая недействующие: выключенную нужно видеть,
+        чтобы включить обратно'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.LeasingProgramList'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Программы лизинга (админка)
+      tags:
+      - quotes-admin
+    post:
+      consumes:
+      - application/json
+      description: Создаёт программу при пустом id и обновляет при заполненном. Согласованность
+        границ между собой проверяет домен
+      parameters:
+      - description: Программа лизинга
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/form.LeasingProgramSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.LeasingProgram'
+        "400":
+          description: 'Код ошибки: границы программы несогласованы или невалидный
+            вход'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Программа не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Сохранение программы лизинга
+      tags:
+      - quotes-admin
+  /v1/admin/leasing-programs/{programID}:
+    delete:
+      description: Программу, по которой уже выпущены предложения, удалить нельзя
+        — её выключают флагом isActive
+      parameters:
+      - description: Идентификатор программы
+        in: path
+        name: programID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Операция доступна только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Программа не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "409":
+          description: По программе выпущены предложения
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Удаление программы лизинга
+      tags:
+      - quotes-admin
+  /v1/admin/media/categories:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Принимает изображение JPEG, PNG или WebP не больше 5 МиБ. Тип определяется
+        по содержимому файла, имя генерирует сервер. Путь из ответа кладётся в imagePath
+        категории; без него обложку подставляет сервис по первой опубликованной машине
+        поддерева
+      parameters:
+      - description: Изображение
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.UploadedFile'
+        "400":
+          description: 'Код ошибки: файл не передан, больше предела или неподдерживаемого
+            типа'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Загрузка обложки раздела каталога
+      tags:
+      - media-admin
+  /v1/admin/media/machines:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Принимает изображение JPEG, PNG или WebP не больше 5 МиБ. Тип определяется
+        по содержимому файла, имя генерирует сервер. Возвращает путь и адрес в том
+        же виде, что и фотография карточки
+      parameters:
+      - description: Изображение
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.UploadedFile'
+        "400":
+          description: 'Код ошибки: файл не передан, больше предела или неподдерживаемого
+            типа'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Загрузка фотографии карточки
+      tags:
+      - media-admin
+  /v1/admin/media/programs:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Принимает изображение JPEG, PNG или WebP не больше 5 МиБ. Тип определяется
+        по содержимому файла, имя генерирует сервер
+      parameters:
+      - description: Изображение
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.UploadedFile'
+        "400":
+          description: 'Код ошибки: файл не передан, больше предела или неподдерживаемого
+            типа'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Загрузка логотипа программы лизинга
+      tags:
+      - media-admin
+  /v1/admin/quotes:
+    get:
+      description: Предложения, выпущенные текущим пользователем, свежие сверху
+      parameters:
+      - description: Размер страницы
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.QuoteList'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Мои коммерческие предложения
+      tags:
+      - quotes-admin
+    post:
+      consumes:
+      - application/json
+      description: Читает опубликованную карточку, фиксирует курс, проверяет параметры
+        против границ программы лизинга и считает график. Возвращает предложение вместе
+        с токеном публичной ссылки
+      parameters:
+      - description: Параметры предложения
+        in: body
+        name: quote
+        required: true
+        schema:
+          $ref: '#/definitions/form.QuoteIssue'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.QuoteIssued'
+        "400":
+          description: 'Код ошибки: параметры вне границ программы или невалидный
+            вход'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка или программа не найдены
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Выпуск коммерческого предложения
+      tags:
+      - quotes-admin
+  /v1/admin/quotes/{quoteID}:
+    get:
+      description: Предложение по внутреннему идентификатору. Отметку первого открытия
+        не ставит
+      parameters:
+      - description: Идентификатор предложения
+        in: path
+        name: quoteID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Quote'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Роль не имеет доступа к разделу
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Предложение не найдено
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Коммерческое предложение (админка)
+      tags:
+      - quotes-admin
+  /v1/auth/admin/token:
+    post:
+      consumes:
+      - application/json
+      description: Выпускает токен только для заранее заведённого администратора (ADMIN_PHONES)
+      parameters:
+      - description: Номер телефона
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/form.AuthTokenIssue'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AuthToken'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Номер не заведён как администратор
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Токен администратора
+      tags:
+      - auth
+  /v1/auth/manager/token:
+    post:
+      consumes:
+      - application/json
+      description: Выпускает токен по номеру телефона. Учётная запись создаётся при
+        первом входе
+      parameters:
+      - description: Номер телефона
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/form.AuthTokenIssue'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AuthToken'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Токен менеджера
+      tags:
+      - auth
+  /v1/auth/me:
+    get:
+      description: 'Учётная запись, от имени которой действует токен. Читается из
+        хранилища, а не собирается из токена: запись могла быть удалена после его
+        выпуска'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AuthUser'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Учётная запись не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Своя учётная запись
+      tags:
+      - auth
+    patch:
+      consumes:
+      - application/json
+      description: 'Задаёт имя для показа в админке. Только своё: имя не участвует
+        в правах, а знает его сам сотрудник — вход идёт по номеру, форм регистрации
+        нет. Пустая строка очищает имя'
+      parameters:
+      - description: Имя
+        in: body
+        name: name
+        required: true
+        schema:
+          $ref: '#/definitions/form.AuthUserRename'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AuthUser'
+        "400":
+          description: 'Код ошибки: имя слишком длинное'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Учётная запись не найдена
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Смена своего имени
+      tags:
+      - auth
+  /v1/auth/staff:
+    get:
+      description: Учётные записи сотрудников в порядке (роль, телефон). Только для
+        администратора
+      parameters:
+      - description: 'Роль: manager или admin'
+        in: query
+        name: role
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AuthUserList'
+        "400":
+          description: Неизвестная роль
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "401":
+          description: Токен не передан, испорчен или истёк
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "403":
+          description: Список сотрудников доступен только администратору
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      security:
+      - BearerAuth: []
+      summary: Сотрудники
+      tags:
+      - auth
+  /v1/catalog/categories:
+    get:
+      description: Плоский список категорий с parent_id в порядке (родитель, position).
+        Дерево клиент собирает сам одним проходом
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.CategoryList'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Дерево категорий
+      tags:
+      - catalog
+  /v1/catalog/categories/{categoryID}/attributes:
+    get:
+      description: 'Набор характеристик для панели фильтров вместе с вариантами для
+        типа enum. Включает характеристики, объявленные у родительских категорий:
+        они действуют и в дочерних. Объявление в самой категории затеняет одноимённое
+        у предка. У числовых приходят границы значений в разделе: из них строится
+        подсказка под полем фильтра'
+      parameters:
+      - description: Идентификатор категории
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+        in: path
+        name: categoryID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AttributeList'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Характеристики категории
+      tags:
+      - catalog
+  /v1/catalog/machines/{slug}:
+    get:
+      description: Опубликованная карточка вместе с характеристиками и фотографиями.
+        Неопубликованная отдаётся как несуществующая. Цена в тенге приходит вместе
+        с датой курса; при отсутствии курса обоих полей нет
+      parameters:
+      - description: Идентификатор карточки в URL
+        example: xcmg-xe215c
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Machine'
+        "404":
+          description: Карточка не найдена или не опубликована
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Карточка техники
+      tags:
+      - catalog
+  /v1/catalog/machines/search:
+    post:
+      consumes:
+      - application/json
+      description: Поиск опубликованных карточек с фильтрами, сортировкой и keyset-пагинацией.
+        Черновики не возвращаются ни при каких параметрах, включая isActive — на витрине
+        он игнорируется. Поиск query ищет подстроку в названии, бренде и модели. Цена
+        в тенге приходит вместе с датой курса; при отсутствии курса обоих полей нет,
+        а выдача работает как обычно
+      parameters:
+      - description: Условия поиска
+        in: body
+        name: filter
+        required: true
+        schema:
+          $ref: '#/definitions/form.MachineSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.MachinePage'
+        "400":
+          description: 'Код ошибки: невалидный фильтр или испорченный курсор'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Поиск по каталогу
+      tags:
+      - catalog
+  /v1/leads:
+    post:
+      consumes:
+      - application/json
+      description: Принимает обратный звонок или запрос цены. Номер нормализуется.
+        Слишком частые заявки с одного номера отклоняются с кодом 409
+      parameters:
+      - description: Заявка
+        in: body
+        name: lead
+        required: true
+        schema:
+          $ref: '#/definitions/form.LeadCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/presenter.LeadAccepted'
+        "400":
+          description: Код ошибки
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "409":
+          description: Заявка с этого номера уже принята
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Заявка с сайта
+      tags:
+      - quotes
+  /v1/leasing-programs:
+    get:
+      description: Действующие программы с границами, внутри которых считается платёж
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.LeasingProgramList'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Программы лизинга
+      tags:
+      - quotes
+  /v1/leasing/calculate:
+    post:
+      consumes:
+      - application/json
+      description: 'Справочный расчёт по опубликованной карточке. Цену и курс сервер
+        берёт сам: цену по слагу, курс — действующий. Ничего не сохраняется и не фиксируется.
+        Машина со скрытой ценой отвергается. Частота обращений с одного адреса ограничена'
+      parameters:
+      - description: Параметры расчёта
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/form.LeasingCalculate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.LeasingCalculation'
+        "400":
+          description: 'Код ошибки: параметры вне границ программы, цена скрыта или
+            невалидный вход'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка, программа или курс не найдены
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "429":
+          description: Превышена частота обращений с адреса
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Расчёт лизинга
+      tags:
+      - catalog
+  /v1/machines/{slug}/tco:
+    post:
+      consumes:
+      - application/json
+      description: Разложенная стоимость владения за срок. Расход топлива, интервал
+        и стоимость ТО, остаточная стоимость берутся по карточке; чего не хватило
+        — в поле missing
+      parameters:
+      - description: Идентификатор карточки в URL
+        in: path
+        name: slug
+        required: true
+        type: string
+      - description: Параметры расчёта
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/form.TCOCalculate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.TCOResult'
+        "400":
+          description: 'Код ошибки: цена скрыта или невалидный вход'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Карточка или курс не найдены
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "429":
+          description: Превышена частота обращений с адреса
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Стоимость владения
+      tags:
+      - catalog
+  /v1/quotes/{token}:
+    get:
+      description: Предложение вместе с машиной, зафиксированным курсом, параметрами
+        расчёта и полным графиком платежей. Первое открытие фиксируется. Истёкшее
+        предложение возвращается с признаком isExpired
+      parameters:
+      - description: Токен публичной ссылки
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.Quote'
+        "404":
+          description: Предложение не найдено
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Коммерческое предложение по ссылке
+      tags:
+      - quotes
+  /v1/quotes/{token}/recalculate:
+    post:
+      consumes:
+      - application/json
+      description: Считает график на новых условиях по зафиксированному в предложении
+        курсу. Ничего не сохраняет и выпущенное предложение не меняет
+      parameters:
+      - description: Публичный токен предложения
+        in: path
+        name: token
+        required: true
+        type: string
+      - description: Новые условия
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/form.QuoteRecalculate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.LeasingCalculation'
+        "400":
+          description: 'Код ошибки: параметры вне границ программы или невалидный
+            вход'
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "404":
+          description: Предложение не найдено
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "429":
+          description: Превышена частота обращений с адреса
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse400'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/swagger.HTTPResponse500'
+      summary: Пересчёт предложения на других условиях
+      tags:
+      - quotes
+securityDefinitions:
+  BearerAuth:
+    description: Токен доступа в формате "Bearer <token>". Выпускается ручками /v1/auth/*/token
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

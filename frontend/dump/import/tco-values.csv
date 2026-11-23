@@ -1,0 +1,62 @@
+# Величины стоимости владения, заполняемые руками.
+#
+# Расход топлива — В ЛИТРАХ НА МОТОЧАС, не на 100 км и не за смену.
+# Интервал ТО — моточасов между плановыми обслуживаниями, целое.
+# Стоимость одного ТО — В ЮАНЯХ, как и цена машины: в тенге
+# пересчитает сервер тем же курсом.
+#
+# ПУСТАЯ КЛЕТКА — ЭТО «НЕ ЗАВЕДЕНО», и так и надо оставлять, если
+# в паспорте величины нет. Расчёт скажет «нет данных» — это честно.
+# Поставить сюда типичное значение хуже, чем оставить пусто: пустую
+# строку на витрине видно, а неверную цифру нет.
+
+slug;name;fuelConsumptionLph;serviceIntervalHours;serviceCostCny
+ekskavator-gusenichnyy-xcmg-model-xe215d;Экскаватор гусеничный XCMG XE215D;;;
+ekskavator-gusenichnyy-xcmg-model-xe260d;Экскаватор гусеничный XCMG XE260D;;;
+ekskavator-gusenichnyy-xcmg-model-xe305d;Экскаватор гусеничный XCMG XE305D;;;
+ekskavator-gusenichnyy-xcmg-model-xe400dk;Экскаватор гусеничный XCMG XE400DK;;;
+ekskavator-gusenichnyy-xe470d;Экскаватор гусеничный XE470D;;;
+ekskavator-kolesnyy-xcmg-model-xe210wd;Экскаватор колесный XCMG XE210WD;;;
+ekskavator-pogruzchik-xc8-s2570;Экскаватор-погрузчик XC8-S2570;;;
+ekskavator-pogruzchik-xc8-s3570;Экскаватор-погрузчик XC8-S3570;;;
+ekskavator-pogruzchik-xcmg-model-xc870hk-0;Экскаватор-погрузчик XCMG XC870HK;;;
+ekskavator-pogruzchik-xcmg-wz30-25;Экскаватор-погрузчик XCMG WZ30-25;;;
+ekskavator-xcmg-model-xe335c;Экскаватор XCMG XE335C;;;
+ekskavator-xcmg-xe60da;Экскаватор XCMG XE60DA;;;
+greyfernyy-ekskavator-xcmg-xe450m;Грейферный экскаватор XCMG XE450M;;;
+gusenichnyy-ekskavator-xcmg-xe1350;Гусеничный экскаватор XCMG XE1350;;;
+gusenichnyy-ekskavator-xcmg-xe1350-0;Гусеничный экскаватор XCMG XE1350;;;
+gusenichnyy-ekskavator-xcmg-xe700df;Гусеничный экскаватор XCMG XE700DF;;;
+karierny-ekskavator-xcmg-xe1250;Карьерный экскаватор XCMG XE1250;;;
+karierny-ekskavator-xcmg-xe1250g;Карьерный экскаватор XCMG XE1250G;;;
+karierny-ekskavator-xcmg-xe2000;Карьерный экскаватор XCMG XE2000;;;
+karierny-ekskavator-xcmg-xe2000e;Карьерный экскаватор XCMG XE2000E;;;
+karierny-ekskavator-xcmg-xe2800e;Карьерный экскаватор XCMG XE2800E;;;
+karierny-ekskavator-xcmg-xe3000;Карьерный экскаватор XCMG XE3000;;;
+karierny-ekskavator-xcmg-xe4000;Карьерный экскаватор XCMG XE4000;;;
+karierny-ekskavator-xcmg-xe4000e;Карьерный экскаватор XCMG XE4000E;;;
+karierny-ekskavator-xcmg-xe7000e;Карьерный экскаватор XCMG XE7000E;;;
+karierny-ekskavator-xcmg-xe700d;Карьерный экскаватор XCMG XE700D;;;
+karierny-ekskavator-xcmg-xe700da;Карьерный экскаватор XCMG XE700DA;;;
+karierny-ekskavator-xcmg-xe700df;Карьерный экскаватор XCMG XE700DF;;;
+karierny-ekskavator-xcmg-xe750g;Карьерный экскаватор XCMG XE750G;;;
+karierny-ekskavator-xcmg-xe800d;Карьерный экскаватор XCMG XE800D;;;
+karierny-ekskavator-xcmg-xe900d;Карьерный экскаватор XCMG XE900D;;;
+karierny-ekskavator-xcmg-xe950d;Карьерный экскаватор XCMG XE950D;;;
+karierny-ekskavator-xcmg-xe950da;Карьерный экскаватор XCMG XE950DA;;;
+karierny-ekskavator-xcmg-xe950g;Карьерный экскаватор XCMG XE950G;;;
+kolesnyy-ekskavator-xe150wb;Колесный экскаватор XE150WB;;;
+kolesnyy-ekskavator-xe150wd;Колесный экскаватор XE150WD;;;
+kolesnyy-ekskavator-xe180wd;Колесный экскаватор XE180WD;;;
+mini-ekskavator-xcmg-xe35u;Мини Экскаватор XCMG XE35U;;;
+wz30-25;Экскаватор-погрузчик XCMG WZ30-25;;;
+xc8-s2570;Экскаватор-погрузчик XC8-S2570;;;
+xc8-s3570;Экскаватор-погрузчик XCMG XC8-S3570;;;
+xcmg-xe210;Колесный экскаватор XE210WB;;;
+xcmg-xe215c;Гусеничный экскаватор XE215С;;;
+xcmg-xe265c;Гусеничный экскаватор XE265C;;;
+xcmg-xe270g;Гусеничный экскаватор XE270G;;;
+xcmg-xe335g;Гусеничный экскаватор XE335G;;;
+xcmg-xe370ca;Гусеничный экскаватор XE370CA;;;
+xcmg-xe370g;Гусеничный экскаватор XE370G;;;
+zemnovodnyy-ekskavator-xcmg-model-xe160sl;Земноводный экскаватор XCMG XE160SL;;;

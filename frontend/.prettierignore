@@ -1,0 +1,17 @@
+.next
+node_modules
+package-lock.json
+public
+
+# Снимок контракта бэкенда и сгенерированные из него типы: правятся только
+# командами sync:spec / gen:api, форматировать их руками нельзя — иначе
+# check:api начнёт падать на расхождении.
+openapi/swagger.json
+src/lib/api/schema.d.ts
+
+# Артефакты дампа: выгрузка чужого сайта, а не наш исходник. Они не
+# коммитятся (см. dump/.gitignore), но лежат в рабочем дереве и без этой
+# строки роняли бы format:check у всех, кто дамп собирал.
+dump/*.json
+dump/pages
+dump/photos

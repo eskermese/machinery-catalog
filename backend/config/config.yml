@@ -1,0 +1,36 @@
+environment:
+  name: local
+
+service_name: techline
+
+auth:
+  # Секрет подписи токенов доступа. Вне local обязателен: без него сервис не стартует.
+  jwt_secret: ""
+  # Телефоны администраторов через запятую: остальные роли входят свободно.
+  admin_phones: ""
+  # Отладочный вход по заголовкам вместо токена. Работает только в окружении local.
+  debug_header_auth: false
+  # Секрет доверенного шлюза. Используется только отладочной схемой.
+  gateway_token: ""
+
+logger:
+  level: debug
+
+database:
+  url: postgres://postgres:postgres@localhost:5432/techline?sslmode=disable
+  max_conns: 10
+  min_conns: 0
+  connect_timeout: 5s
+
+pyroscope:
+  addr: http://localhost:4040
+
+cache:
+  addr: localhost:6379
+  username: ""
+  password: ""
+
+clients:
+  # Сервис настроек.
+  settingsBaseUrl: "http://localhost:8081"
+  getSettingsUri: "/settings/%s"
